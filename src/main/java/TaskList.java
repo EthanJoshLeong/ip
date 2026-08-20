@@ -23,6 +23,19 @@ public class TaskList {
         tasks.remove(index);
     }
 
+    public String addTaskToString(Task task) {
+        return "Walnut: Added task: "
+                + task.toString()
+                + "\n"
+                + "You have " + tasks.size() + " task[s] in your list."
+                + "\n"
+                + "____________________________________________________________\n";
+    }
+
+    public boolean isEmpty() {
+        return tasks.isEmpty();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
