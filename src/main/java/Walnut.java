@@ -18,39 +18,82 @@ public class Walnut {
         System.out.println(banner);
         System.out.println(greeting);
         
-        ArrayList<Task> tasks = new ArrayList<>();
+        TaskList tasks = new TaskList();
 
         while (true) {
             System.out.print("You: ");
             String input = System.console().readLine();
-            String[] words = input.split(" ");
+            String[] request = input.split(" ");
+            String command = request[0];
 
             if (input.equals("bye")) {
                 break;
             } else if (input.equals("list")) {
                 System.out.println("Walnut: Here are the tasks in your list:");
-                for (int i = 0; i < tasks.size(); i++) {
-                    System.out.println((i + 1) + ". " + tasks.get(i).toString());
-                }
+                System.out.println(tasks.toString());
                 System.out.println("____________________________________________________________\n");
                 continue;
-            } else if (words[0].equals("mark")) {
+            } else if (command.equals("mark")) {
                 System.out.println("____________________________________________________________\n"
-                + "Task marked as done!\n");
-                Task task = tasks.get(Integer.parseInt(words[1]) - 1);
+                + "\nTask marked as done!\n");
+                Task task = tasks.get(Integer.parseInt(request[1]) - 1);
                 task.markAsDone();
                 System.out.println(task.toString());
-                System.out.println("____________________________________________________________\n");
-            } else if (words[0].equals("unmark")) {
+                System.out.println("\n____________________________________________________________\n");
+
+            } else if (command.equals("unmark")) {
                 System.out.println("____________________________________________________________\n"
-                + "Task marked as not done!\n");
-                Task task = tasks.get(Integer.parseInt(words[1]) - 1);
+                + "\nTask marked as not done!\n");
+                Task task = tasks.get(Integer.parseInt(request[1]) - 1);
                 task.markAsNotDone();
                 System.out.println(task.toString());
                 System.out.println("____________________________________________________________\n");
+
+            } else if (command.equals("Todo")) {
+                Task task = new ToDo(input);
+                tasks.add(task);
+                String output = "Walnut: Added task: "
+                + task
+                + "You have " + tasks.size() + " tasks in your list."
+                + "\n"
+                + "____________________________________________________________\n";
+                System.out.println(output); 
+
+            } else if (command.equals("event")) {
+                int fromIndex = input.indexOf("/from");
+                int toIndex = input.indexOf("/to");
+                String description = input.substring(5, fromIndex).trim();
+                String from = input.substring(fromIndex + 5, toIndex).trim();
+                String to = input.substring(toIndex + 3).trim();
+                Task task = new Events(description, from, to);
+                tasks.add(task);
+                String output = "Walnut: Added task: "
+                + task
+                + "\n"
+                + "You have " + tasks.size() + " tasks in your list."
+                + "\n"
+                + "____________________________________________________________\n";
+                System.out.println(output); 
+
+            } else if (command.equals("deadline")) {
+                int byIndex = input.indexOf("/by");
+                String description = input.substring(9, byIndex).trim();
+                String by = input.substring(byIndex + 3).trim();
+                Task task = new Deadlines(description, by);
+                tasks.add(task);
+                String output = "Walnut: Added task: "
+                + task
+                + "\n"
+                + "You have " + tasks.size() + " tasks in your list."
+                + "\n"
+                + "____________________________________________________________\n";
+                System.out.println(output); 
+
             } else {
                 String output = "Walnut: Added task: "
                 + input
+                + "\n"
+                + "You have " + tasks.size() + " tasks in your list."
                 + "\n"
                 + "____________________________________________________________\n";
                 System.out.println(output); 
