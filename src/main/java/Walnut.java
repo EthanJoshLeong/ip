@@ -93,7 +93,6 @@ public class Walnut {
                 task.markAsNotDone();
                 System.out.println(task.toString());
                 System.out.println("____________________________________________________________\n");
-                
 
             } else if (command.equals("todo")) {
                 String description = input.substring(4).trim();
@@ -144,6 +143,36 @@ public class Walnut {
                 tasks.add(task);
                 System.out.println(tasks.addTaskToString(task)); 
 
+            } else if (command.equals("remove")) {
+                if (tasks.isEmpty()) {
+                    System.out.println("Your task list is empty. Please add a task first.\n");
+                    System.out.println("____________________________________________________________\n");
+                    continue;
+                }
+                try {
+                    int index = Integer.parseInt(request[1]) - 1;
+                    if (index < 0 || index >= tasks.size()) {
+                        System.out.println("Invalid task number. Please enter a number between 1 and " + tasks.size() + ".\n");
+                        System.out.println("____________________________________________________________\n");
+                        continue;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid task number. Please enter a valid number.\n");
+                    System.out.println("____________________________________________________________\n");
+                    continue;
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("Please specify the task number to mark.\n");
+                    System.out.println("____________________________________________________________\n");
+                    continue;
+                }
+                System.out.println("____________________________________________________________\n"
+                + "\nTask removed!: \n");
+                int index = Integer.parseInt(request[1]) - 1;
+                Task task = tasks.get(index);
+                tasks.remove(index);
+                System.out.println(task.toString());
+                System.out.println("You have " + (tasks.size()) + " task[s] in your list.");
+                System.out.println("____________________________________________________________\n");
             } else {
                 String output = "Invalid task format. Please use the format: todo <description> or event <description> /from <start time> /to <end time> or deadline <description> /by <deadline>"
                 + "\n"
