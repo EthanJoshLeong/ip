@@ -1,4 +1,6 @@
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Parser {
 
@@ -41,10 +43,10 @@ public class Parser {
         if (data[0].equals("T")) {
             newTask = new ToDo(data[2]);
         } else if (data[0].equals("D")) {
-            newTask = new Deadlines(data[2], data[3]);
+            newTask = new Deadlines(data[2], Parser.parseDateTime(data[3]));
         } else if (data[0].equals("E")) {
             String[] dateTime = data[3].split("-");
-            newTask = new Events(data[2], dateTime[0], dateTime[1]);
+            newTask = new Events(data[2], Parser.parseDateTime(dateTime[0]), Parser.parseDateTime(dateTime[1]));
         } else {
             return null;
         }
@@ -54,5 +56,12 @@ public class Parser {
         }
 
         return newTask;
+    }
+
+    public static LocalDateTime parseDateTime(String input) {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+
+        return LocalDateTime.parse(input, formatter);
     }
 }
