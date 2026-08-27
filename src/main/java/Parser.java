@@ -60,6 +60,13 @@ public class Parser {
 
     public static LocalDateTime parseDateTime(String input) {
         DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm");
+
+        return LocalDateTime.parse(input, formatter);
+    }
+
+    public static LocalDateTime parseUserDateTime(String input) {
+        DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
         return LocalDateTime.parse(input, formatter);

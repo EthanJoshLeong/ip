@@ -177,7 +177,7 @@ public class Walnut {
                     LocalDateTime formattedFromDateTime;
                     LocalDateTime formattedToDateTime;
                     try {
-                        formattedFromDateTime = Parser.parseDateTime(from);
+                        formattedFromDateTime = Parser.parseUserDateTime(from);
                     } catch (DateTimeParseException e) {
                         System.out.println("Invalid DateTime format. Please use the format <YYYY-mm-dd HHmm>");
                         continue;
@@ -185,7 +185,7 @@ public class Walnut {
 
                     String to = input.substring(toIndex + 3).trim();
                     try {
-                        formattedToDateTime = Parser.parseDateTime(to);
+                        formattedToDateTime = Parser.parseUserDateTime(to);
                     } catch (DateTimeParseException e) {
                         System.out.println("Invalid DateTime format. Please use the format <YYYY-mm-dd HHmm>");
                         continue;
@@ -219,9 +219,9 @@ public class Walnut {
                     String by = input.substring(byIndex + 3).trim();
                     LocalDateTime formattedByDateTime;
                     try {
-                        formattedByDateTime = Parser.parseDateTime(by);
+                        formattedByDateTime = Parser.parseUserDateTime(by);
                     } catch (DateTimeParseException e) {
-                        System.out.println("Invalid DateTime format. Please use the format <YYYY-mm-dd HHaa>");
+                        System.out.println("Invalid DateTime format. Please use the format <YYYY-mm-dd HHmm>");
                         continue;
                     }
 
