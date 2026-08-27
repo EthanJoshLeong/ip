@@ -1,3 +1,5 @@
+package walnut;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -25,7 +27,7 @@ public class TaskList implements Iterable<Task> {
     }
 
     public String addTaskToString(Task task) {
-        return "Walnut: Added task: "
+        return "walnut.Walnut: Added task: "
                 + task.toString()
                 + "\n"
                 + "You have " + tasks.size() + " task[s] in your list."

@@ -1,3 +1,5 @@
+package walnut;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -17,7 +19,7 @@ public class Ui {
 
     public void showGreeting() {
         String greeting =  "____________________________________________________________\n"
-                + "Hello! I'm Walnut.\n"
+                + "Hello! I'm walnut.Walnut.\n"
                 + "What can I do for you?\n"
                 + "____________________________________________________________\n";
 
@@ -45,7 +47,7 @@ public class Ui {
     }
 
     public void showTaskList(TaskList tasks) {
-        System.out.println("Walnut: Here are the tasks in your list:");
+        System.out.println("walnut.Walnut: Here are the tasks in your list:");
         System.out.println(tasks.toString());
         showLine();
     }
@@ -73,14 +75,14 @@ public class Ui {
 
     public void showTaskMarkedAsDone(Task task) {
         System.out.println("____________________________________________________________\n"
-                + "\nTask marked as done!\n");
+                + "\nwalnut.Task marked as done!\n");
         System.out.println(task.toString());
         showLine();
     }
 
     public void showTaskMarkedAsNotDone(Task task) {
         System.out.println("____________________________________________________________\n"
-                + "\nTask marked as not done!\n");
+                + "\nwalnut.Task marked as not done!\n");
         System.out.println(task);
         showLine();
     }
@@ -92,7 +94,7 @@ public class Ui {
     }
 
     public void showTaskAdded(Task task, int numberOfTasks) {
-        System.out.println("Walnut: Added task: "
+        System.out.println("walnut.Walnut: Added task: "
                 + task
                 + "\n"
                 + "You have " + numberOfTasks + " task[s] in your list."
@@ -119,7 +121,7 @@ public class Ui {
 
     public void showTaskRemoved(Task task, int remainingTasks) {
         System.out.println("____________________________________________________________\n"
-                + "\nTask removed!: \n");
+                + "\nwalnut.Task removed!: \n");
         System.out.println(task);
         System.out.println("You have " + remainingTasks + " task[s] in your list.");
         showLine();

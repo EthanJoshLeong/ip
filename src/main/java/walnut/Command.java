@@ -1,3 +1,5 @@
+package walnut;
+
 public enum Command {
     TODO,
     DEADLINE,
