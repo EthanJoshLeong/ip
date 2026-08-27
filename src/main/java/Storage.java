@@ -36,13 +36,13 @@ public class Storage {
             if (task instanceof ToDo) {
                 line = "T | " + (task.isDone() ? 1 : 0) +" | " +
                         task.getDescription();
-            } else if (task instanceof Deadlines) {
+            } else if (task instanceof Deadline) {
                 line = "D | " + (task.isDone() ? 1 : 0) +" | " +
-                        task.getDescription() + " | " + ((Deadlines) task).getDeadline();
-            } else if (task instanceof Events) {
+                        task.getDescription() + " | " + ((Deadline) task).getDeadline();
+            } else if (task instanceof Event) {
                 line = "E | " + (task.isDone() ? 1 : 0) +" | " +
-                        task.getDescription() + " | " + ((Events) task).getEventStartTime() +
-                        "-" + ((Events) task).getEventEndTime();
+                        task.getDescription() + " | " + ((Event) task).getEventStartTime() +
+                        "-" + ((Event) task).getEventEndTime();
             }
             data.add(line);
         }
