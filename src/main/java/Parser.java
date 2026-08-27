@@ -1,35 +1,34 @@
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Parser {
 
-    public static Commands parseCommand(String command) {
+    public static Command parseCommand(String command) {
 
         switch (command.toLowerCase()) {
         case "todo":
-            return Commands.TODO;
+            return Command.TODO;
 
         case "deadline":
-            return Commands.DEADLINE;
+            return Command.DEADLINE;
 
         case "event":
-            return Commands.EVENT;
+            return Command.EVENT;
 
         case "mark":
-            return Commands.MARK;
+            return Command.MARK;
 
         case "unmark":
-            return Commands.UNMARK;
+            return Command.UNMARK;
 
         case "list":
-            return Commands.LIST;
+            return Command.LIST;
 
         case "bye":
-            return Commands.BYE;
+            return Command.BYE;
 
         case "remove":
-            return Commands.REMOVE;
+            return Command.REMOVE;
 
         default:
             return null;
@@ -43,10 +42,10 @@ public class Parser {
         if (data[0].equals("T")) {
             newTask = new ToDo(data[2]);
         } else if (data[0].equals("D")) {
-            newTask = new Deadlines(data[2], Parser.parseDateTime(data[3]));
+            newTask = new Deadline(data[2], Parser.parseDateTime(data[3]));
         } else if (data[0].equals("E")) {
             String[] dateTime = data[3].split("-");
-            newTask = new Events(data[2], Parser.parseDateTime(dateTime[0]), Parser.parseDateTime(dateTime[1]));
+            newTask = new Event(data[2], Parser.parseDateTime(dateTime[0]), Parser.parseDateTime(dateTime[1]));
         } else {
             return null;
         }
