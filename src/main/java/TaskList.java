@@ -1,6 +1,7 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class TaskList {
+public class TaskList implements Iterable<Task> {
     private ArrayList<Task> tasks;
 
     public TaskList() {
@@ -34,6 +35,11 @@ public class TaskList {
 
     public boolean isEmpty() {
         return tasks.isEmpty();
+    }
+
+    @Override
+    public Iterator<Task> iterator() {
+        return tasks.iterator();
     }
 
     @Override
