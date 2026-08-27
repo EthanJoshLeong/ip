@@ -8,8 +8,17 @@ public class Events extends Task {
         this.eventEndTime = eventEndTime;
     }
 
+    public String getEventStartTime() {
+        return this.eventStartTime;
+    }
+
+    public String getEventEndTime() {
+        return this.eventEndTime;
+    }
+
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + eventStartTime + " to: " + eventEndTime + ")";
+        return "[E]" + super.toString() +
+                " (from: " + eventStartTime + " to: " + eventEndTime + ")";
     }
 }
