@@ -12,11 +12,11 @@ public class Events extends Task {
     }
 
     public String getEventStartTime() {
-        return this.eventStartTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+        return this.eventStartTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm"));
     }
 
     public String getEventEndTime() {
-        return this.eventEndTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"));
+        return this.eventEndTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm"));
     }
 
     @Override
