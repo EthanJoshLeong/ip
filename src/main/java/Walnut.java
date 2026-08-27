@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -172,8 +174,24 @@ public class Walnut {
                         continue;
                     }
                     String from = input.substring(fromIndex + 5, toIndex).trim();
+                    LocalDateTime formattedFromDateTime;
+                    LocalDateTime formattedToDateTime;
+                    try {
+                        formattedFromDateTime = Parser.parseDateTime(from);
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Invalid DateTime format. Please use the format <YYYY-mm-dd HHmm>");
+                        continue;
+                    }
+
                     String to = input.substring(toIndex + 3).trim();
-                    Task task = new Events(description, from, to);
+                    try {
+                        formattedToDateTime = Parser.parseDateTime(to);
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Invalid DateTime format. Please use the format <YYYY-mm-dd HHmm>");
+                        continue;
+                    }
+
+                    Task task = new Events(description, formattedFromDateTime, formattedToDateTime);
                     tasks.add(task);
                     try {
                         storage.save(tasks);
@@ -197,8 +215,17 @@ public class Walnut {
                         System.out.println("____________________________________________________________\n");
                         continue;
                     }
+
                     String by = input.substring(byIndex + 3).trim();
-                    Task task = new Deadlines(description, by);
+                    LocalDateTime formattedByDateTime;
+                    try {
+                        formattedByDateTime = Parser.parseDateTime(by);
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Invalid DateTime format. Please use the format <YYYY-mm-dd HHaa>");
+                        continue;
+                    }
+
+                    Task task = new Deadlines(description, formattedByDateTime);
                     tasks.add(task);
                     try {
                         storage.save(tasks);
