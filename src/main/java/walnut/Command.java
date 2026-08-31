@@ -1,5 +1,8 @@
 package walnut;
 
+/**
+ * Represents a command accepted by Walnut.
+ */
 public enum Command {
     TODO,
     DEADLINE,

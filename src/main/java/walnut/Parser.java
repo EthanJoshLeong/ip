@@ -3,8 +3,17 @@ package walnut;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Converts user input and stored task data into Walnut objects.
+ */
 public class Parser {
 
+    /**
+     * Returns the command represented by the specified command string.
+     *
+     * @param command Command string to parse.
+     * @return Corresponding command, or {@code null} if the command is not recognized.
+     */
     public static Command parseCommand(String command) {
 
         switch (command.toLowerCase()) {
@@ -37,6 +46,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Returns the task represented by the specified stored task record.
+     *
+     * @param task Stored task record to parse.
+     * @return Parsed task, or {@code null} if the task type is not recognized.
+     */
     public static Task parseTask(String task) {
         String[] data = task.split(" \\| ");
         Task newTask;
@@ -59,6 +74,12 @@ public class Parser {
         return newTask;
     }
 
+    /**
+     * Returns the date and time represented by a stored date-time string.
+     *
+     * @param input Stored date-time string to parse.
+     * @return Parsed date and time.
+     */
     public static LocalDateTime parseDateTime(String input) {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm");
@@ -66,6 +87,12 @@ public class Parser {
         return LocalDateTime.parse(input, formatter);
     }
 
+    /**
+     * Returns the date and time represented by a user-entered date-time string.
+     *
+     * @param input User-entered date-time string to parse.
+     * @return Parsed date and time.
+     */
     public static LocalDateTime parseUserDateTime(String input) {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");

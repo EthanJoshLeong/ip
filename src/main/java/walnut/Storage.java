@@ -7,10 +7,21 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Loads tasks from and saves tasks to Walnut's data file.
+ */
 public class Storage {
     Path path = Paths.get("./data/Walnut.txt");
     Path dir = Paths.get("./data/");
 
+    /**
+     * Returns all stored task records.
+     *
+     * <p>Creates the data directory and data file if they do not exist.
+     *
+     * @return List of stored task records.
+     * @throws IOException If the data directory or file cannot be accessed.
+     */
     public List<String> load() throws IOException {
         if (Files.notExists(dir)) {
             Files.createDirectories(dir);
@@ -23,6 +34,12 @@ public class Storage {
         return data;
     }
 
+    /**
+     * Saves all tasks to Walnut's data file.
+     *
+     * @param tasks Tasks to save.
+     * @throws IOException If the data directory or file cannot be accessed.
+     */
     public void save(TaskList tasks) throws IOException {
         if (Files.notExists(dir)) {
             Files.createDirectories(dir);

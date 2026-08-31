@@ -6,7 +6,15 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Runs the Walnut command-line task manager.
+ */
 public class Walnut {
+    /**
+     * Starts Walnut, loads saved tasks, and processes commands until exit.
+     *
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
         Ui ui = new Ui();
         TaskList tasks = new TaskList();
