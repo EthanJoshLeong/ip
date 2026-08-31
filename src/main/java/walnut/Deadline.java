@@ -3,9 +3,15 @@ package walnut;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a task that must be completed by a specified date and time.
+ */
 public class Deadline extends Task {
     private LocalDateTime deadline;
 
+    /**
+     * Creates a deadline task with the specified description and deadline.
+     */
     public Deadline(String description, LocalDateTime deadline) {
         super(description);
         this.deadline = deadline;
