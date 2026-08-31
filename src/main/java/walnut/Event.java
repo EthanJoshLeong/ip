@@ -3,11 +3,18 @@ package walnut;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents a task that takes place during a specified time interval.
+ */
 public class Event extends Task {
     private LocalDateTime eventStartTime;
     private LocalDateTime eventEndTime;
 
-    public Event(String description, LocalDateTime eventStartTime, LocalDateTime eventEndTime) {
+    /**
+     * Creates an event with the specified description and time interval.
+     */
+    public Event(String description, LocalDateTime eventStartTime,
+                 LocalDateTime eventEndTime) {
         super(description);
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
