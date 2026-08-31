@@ -32,6 +32,9 @@ public class Parser {
         case "remove":
             return Command.REMOVE;
 
+        case "find":
+            return Command.FIND;
+
         default:
             return null;
         }
