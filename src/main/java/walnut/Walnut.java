@@ -236,6 +236,21 @@ public class Walnut {
                     ui.showTaskRemoved(task, tasks.size());
                     break;
                 }
+
+                case FIND: {
+                    if (tasks.isEmpty()) {
+                        ui.showEmptyTaskListMessage();
+                        continue;
+                    }
+                    String keyword = input.substring(5).trim();
+                    if (keyword.isEmpty()) {
+                        ui.showEmptyKeyword();
+                        continue;
+                    }
+                    ArrayList<Task> foundTasks = tasks.find(keyword);
+                    ui.showFoundTasks(foundTasks);
+                    break;
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package walnut;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -28,7 +29,7 @@ public class Ui {
      */
     public void showGreeting() {
         String greeting =  "____________________________________________________________\n"
-                + "Hello! I'm walnut.Walnut.\n"
+                + "Hello! I'm Walnut.\n"
                 + "What can I do for you?\n"
                 + "____________________________________________________________\n";
 
@@ -72,7 +73,7 @@ public class Ui {
      * @param tasks Task list to display.
      */
     public void showTaskList(TaskList tasks) {
-        System.out.println("walnut.Walnut: Here are the tasks in your list:");
+        System.out.println("Walnut: Here are the tasks in your list:");
         System.out.println(tasks.toString());
         showLine();
     }
@@ -119,7 +120,7 @@ public class Ui {
      */
     public void showTaskMarkedAsDone(Task task) {
         System.out.println("____________________________________________________________\n"
-                + "\nwalnut.Task marked as done!\n");
+                + "\nWalnut: Task marked as done!\n");
         System.out.println(task.toString());
         showLine();
     }
@@ -131,7 +132,7 @@ public class Ui {
      */
     public void showTaskMarkedAsNotDone(Task task) {
         System.out.println("____________________________________________________________\n"
-                + "\nwalnut.Task marked as not done!\n");
+                + "\nWalnut.Task marked as not done!\n");
         System.out.println(task);
         showLine();
     }
@@ -154,7 +155,7 @@ public class Ui {
      * @param numberOfTasks Number of tasks currently in the list.
      */
     public void showTaskAdded(Task task, int numberOfTasks) {
-        System.out.println("walnut.Walnut: Added task: "
+        System.out.println("Walnut: Added task: "
                 + task
                 + "\n"
                 + "You have " + numberOfTasks + " task[s] in your list."
@@ -196,7 +197,7 @@ public class Ui {
      */
     public void showTaskRemoved(Task task, int remainingTasks) {
         System.out.println("____________________________________________________________\n"
-                + "\nwalnut.Task removed!: \n");
+                + "\nWalnut: Task removed!: \n");
         System.out.println(task);
         System.out.println("You have " + remainingTasks + " task[s] in your list.");
         showLine();
@@ -214,5 +215,24 @@ public class Ui {
      */
     public void showLine() {
         System.out.println("____________________________________________________________\n");
+    }
+
+    /**
+     * Displays a message when no search keyword is provided.
+     */
+    public void showEmptyKeyword() {
+        System.out.println("Please specify a keyword to search for.");
+        showLine();
+    }
+
+    /**
+     * Displays the tasks that match the specified keyword.
+     *
+     * @param foundTasks Tasks that match the search keyword.
+     */
+    public void showFoundTasks(ArrayList<Task> foundTasks) {
+        System.out.println("Walnut: Here are the matching tasks in your list:");
+        System.out.println(TaskList.toString(foundTasks));
+        showLine();
     }
 }

@@ -11,5 +11,6 @@ public enum Command {
     UNMARK,
     LIST,
     BYE,
-    REMOVE
+    REMOVE,
+    FIND
 }
