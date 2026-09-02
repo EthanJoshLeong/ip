@@ -1,6 +1,5 @@
 package walnut;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -95,12 +94,14 @@ public class TaskList implements Iterable<Task> {
     }
 
     @Override
+    public String toString() {
+        return toString(this.tasks);
+    }
+
+    @Override
     public Iterator<Task> iterator() {
         return tasks.iterator();
     }
 
-    @Override
-    public String toString() {
-        return toString(this.tasks);
-    }
+
 }
