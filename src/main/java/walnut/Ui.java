@@ -28,7 +28,7 @@ public class Ui {
      * Displays the welcome message.
      */
     public void showGreeting() {
-        String greeting =  "____________________________________________________________\n"
+        String greeting = "____________________________________________________________\n"
                 + "Hello! I'm Walnut.\n"
                 + "What can I do for you?\n"
                 + "____________________________________________________________\n";
@@ -40,7 +40,7 @@ public class Ui {
      * Displays the farewell message.
      */
     public void showFarewell() {
-        String farewell =  "____________________________________________________________\n"
+        String farewell = "____________________________________________________________\n"
                 + "Bye. Hope to see you again soon!\n"
                 + "____________________________________________________________";
 
@@ -132,7 +132,7 @@ public class Ui {
      */
     public void showTaskMarkedAsNotDone(Task task) {
         System.out.println("____________________________________________________________\n"
-                + "\nWalnut.Task marked as not done!\n");
+                + "\nWalnut: Task marked as not done!\n");
         System.out.println(task);
         showLine();
     }
