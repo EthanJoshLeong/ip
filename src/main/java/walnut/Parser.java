@@ -17,35 +17,35 @@ public class Parser {
     public static Command parseCommand(String command) {
 
         switch (command.toLowerCase()) {
-        case "todo":
-            return Command.TODO;
+            case "todo":
+                return Command.TODO;
 
-        case "deadline":
-            return Command.DEADLINE;
+            case "deadline":
+                return Command.DEADLINE;
 
-        case "event":
-            return Command.EVENT;
+            case "event":
+                return Command.EVENT;
 
-        case "mark":
-            return Command.MARK;
+            case "mark":
+                return Command.MARK;
 
-        case "unmark":
-            return Command.UNMARK;
+            case "unmark":
+                return Command.UNMARK;
 
-        case "list":
-            return Command.LIST;
+            case "list":
+                return Command.LIST;
 
-        case "bye":
-            return Command.BYE;
+            case "bye":
+                return Command.BYE;
 
-        case "remove":
-            return Command.REMOVE;
+            case "remove":
+                return Command.REMOVE;
 
-        case "find":
-            return Command.FIND;
+            case "find":
+                return Command.FIND;
 
-        default:
-            return null;
+            default:
+                return null;
         }
     }
 
