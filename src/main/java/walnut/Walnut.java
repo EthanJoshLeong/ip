@@ -251,6 +251,11 @@ public class Walnut {
                     ui.showFoundTasks(foundTasks);
                     break;
                 }
+
+                default: {
+                    ui.showInvalidCommand();
+                    break;
+                }
             }
         }
     }
