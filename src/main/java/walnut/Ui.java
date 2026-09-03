@@ -1,70 +1,45 @@
 package walnut;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Handles console input and output for Walnut.
  */
 public class Ui {
 
-    private Scanner scanner = new Scanner(System.in);
-
     /**
      * Displays the application banner.
      */
-    public void showBanner() {
-        String banner = " _    _       _             _\n"
+    public String showBanner() {
+        return " _    _       _             _\n"
                 + "| |  | | __ _| |_ __  _   _| |_\n"
                 + "| |/\\| |/ _` | | '_ \\| | | | __|\n"
                 + "|  /\\  | (_| | | | | | |_| | |_\n"
-                + "|_/  \\_|\\__,_|_|_| |_|\\__,_|\\__|\n"
-                + "____________________________________________________________\n";
-
-        System.out.println(banner);
+                + "|_/  \\_|\\__,_|_|_| |_|\\__,_|\\__|\n";
     }
 
     /**
      * Displays the welcome message.
      */
-    public void showGreeting() {
-        String greeting = "____________________________________________________________\n"
-                + "Hello! I'm Walnut.\n"
-                + "What can I do for you?\n"
-                + "____________________________________________________________\n";
-
-        System.out.println(greeting);
+    public String showGreeting() {
+        return "Hello! I'm Walnut.\n"
+                + "What can I do for you?\n";
     }
 
     /**
      * Displays the farewell message.
      */
-    public void showFarewell() {
-        String farewell = "____________________________________________________________\n"
-                + "Bye. Hope to see you again soon!\n"
-                + "____________________________________________________________";
-
-        System.out.println(farewell);
-    }
-
-    /**
-     * Returns one command line read from the console.
-     *
-     * @return Command line entered by the user.
-     */
-    public String readCommand() {
-        System.out.print("You: ");
-        return scanner.nextLine();
+    public String showFarewell() {
+        return "Bye. Hope to see you again soon!\n";
     }
 
     /**
      * Displays the supported task command formats.
      */
-    public void showInvalidCommand() {
-        System.out.println("Invalid task format. Please use the format: todo <description> "
+    public String showInvalidCommand() {
+        return "Invalid task format. Please use the format: todo <description> "
                 + "or event <description> /from <start time> /to <end time> "
-                + "or deadline <description> /by <deadline>");
-        showLine();
+                + "or deadline <description> /by <deadline>";
     }
 
     /**
@@ -72,18 +47,15 @@ public class Ui {
      *
      * @param tasks Task list to display.
      */
-    public void showTaskList(TaskList tasks) {
-        System.out.println("Walnut: Here are the tasks in your list:");
-        System.out.println(tasks.toString());
-        showLine();
+    public String showTaskList(TaskList tasks) {
+        return "Walnut: Here are the tasks in your list:\n" + tasks.toString();
     }
 
     /**
      * Displays a message for an empty task list.
      */
-    public void showEmptyTaskListMessage() {
-        System.out.println("Your task list is empty. Please add a task first.\n");
-        showLine();
+    public String showEmptyTaskListMessage() {
+        return "Your task list is empty. Please add a task first.\n";
     }
 
     /**
@@ -91,26 +63,23 @@ public class Ui {
      *
      * @param size Number of tasks in the list.
      */
-    public void showInvalidTaskNumber(int size) {
-        System.out.println("Invalid task number. Please enter a number between 1 and "
-                + size + ".\n");
-        showLine();
+    public String showInvalidTaskNumber(int size) {
+        return "Invalid task number. Please enter a number between 1 and "
+                + size + ".\n";
     }
 
     /**
      * Displays an invalid task-number message.
      */
-    public void showInvalidTaskNumber() {
-        System.out.println("Invalid task number. Please enter a valid number.\n");
-        showLine();
+    public String showInvalidTaskNumber() {
+        return "Invalid task number. Please enter a valid number.\n";
     }
 
     /**
      * Displays a message when a task number is missing.
      */
-    public void showMissingTaskNumber() {
-        System.out.println("Please specify the task number to mark.\n");
-        showLine();
+    public String showMissingTaskNumber() {
+        return "Please specify the task number to mark.\n";
     }
 
     /**
@@ -118,11 +87,8 @@ public class Ui {
      *
      * @param task Task that was completed.
      */
-    public void showTaskMarkedAsDone(Task task) {
-        System.out.println("____________________________________________________________\n"
-                + "\nWalnut: Task marked as done!\n");
-        System.out.println(task.toString());
-        showLine();
+    public String showTaskMarkedAsDone(Task task) {
+        return "Walnut: Task marked as done!";
     }
 
     /**
@@ -130,11 +96,8 @@ public class Ui {
      *
      * @param task Task that was marked incomplete.
      */
-    public void showTaskMarkedAsNotDone(Task task) {
-        System.out.println("____________________________________________________________\n"
-                + "\nWalnut: Task marked as not done!\n");
-        System.out.println(task);
-        showLine();
+    public String showTaskMarkedAsNotDone(Task task) {
+        return "Walnut: Task marked as not done!";
     }
 
     /**
@@ -142,10 +105,9 @@ public class Ui {
      *
      * @param taskType Type of task with the empty description.
      */
-    public void showEmptyDescription(String taskType) {
-        System.out.println("The description of a " + taskType
-                + " cannot be empty.\n");
-        showLine();
+    public String showEmptyDescription(String taskType) {
+        return "The description of a " + taskType
+                + " cannot be empty.";
     }
 
     /**
@@ -154,39 +116,33 @@ public class Ui {
      * @param task Task that was added.
      * @param numberOfTasks Number of tasks currently in the list.
      */
-    public void showTaskAdded(Task task, int numberOfTasks) {
-        System.out.println("Walnut: Added task: "
-                + task
-                + "\n"
-                + "You have " + numberOfTasks + " task[s] in your list."
-                + "\n"
-                + "____________________________________________________________\n");
+    public String showTaskAdded(Task task, int numberOfTasks) {
+        return "Walnut: Added task: " + task
+                + "\nYou have " + numberOfTasks + " task[s] in your list.";
     }
 
     /**
      * Displays the required event command format.
      */
-    public void showInvalidEventFormat() {
-        System.out.println("Invalid event format. Please use the format: "
-                + "event <description> /from <start time> /to <end time>\n");
-        showLine();
+    public String showInvalidEventFormat() {
+        return "Invalid event format. Please use the format: "
+                + "event <description> /from <start time> /to <end time>\n";
     }
 
     /**
      * Displays the required deadline command format.
      */
-    public void showInvalidDeadlineFormat() {
-        System.out.println("Invalid deadline format. Please use the format: "
-                + "deadline <description> /by <deadline>\n");
-        showLine();
+    public String showInvalidDeadlineFormat() {
+        return "Invalid deadline format. Please use the format: "
+                + "deadline <description> /by <deadline>\n";
     }
 
     /**
      * Displays the required date and time format.
      */
-    public void showInvalidDateTime() {
-        System.out.println("Invalid DateTime format. "
-                + "Please use the format <YYYY-mm-dd HHmm>");
+    public String showInvalidDateTime() {
+        return "Invalid DateTime format. "
+                + "Please use the format <YYYY-mm-dd HHmm>";
     }
 
     /**
@@ -195,34 +151,23 @@ public class Ui {
      * @param task Task that was removed.
      * @param remainingTasks Number of tasks remaining in the list.
      */
-    public void showTaskRemoved(Task task, int remainingTasks) {
-        System.out.println("____________________________________________________________\n"
-                + "\nWalnut: Task removed!: \n");
-        System.out.println(task);
-        System.out.println("You have " + remainingTasks + " task[s] in your list.");
-        showLine();
+    public String showTaskRemoved(Task task, int remainingTasks) {
+        return "Walnut: Task removed!: \n" + task
+                + "\nYou have " + remainingTasks + " task[s] in your list.";
     }
 
     /**
      * Displays a storage error message.
      */
-    public void showStorageError() {
-        System.out.println("Error loading tasks.");
-    }
-
-    /**
-     * Displays a separator line.
-     */
-    public void showLine() {
-        System.out.println("____________________________________________________________\n");
+    public String showStorageError() {
+        return "Error loading tasks.";
     }
 
     /**
      * Displays a message when no search keyword is provided.
      */
-    public void showEmptyKeyword() {
-        System.out.println("Please specify a keyword to search for.");
-        showLine();
+    public String showEmptyKeyword() {
+        return "Please specify a keyword to search for.";
     }
 
     /**
@@ -230,9 +175,7 @@ public class Ui {
      *
      * @param foundTasks Tasks that match the search keyword.
      */
-    public void showFoundTasks(ArrayList<Task> foundTasks) {
-        System.out.println("Walnut: Here are the matching tasks in your list:");
-        System.out.println(TaskList.toString(foundTasks));
-        showLine();
+    public String showFoundTasks(ArrayList<Task> foundTasks) {
+        return "Walnut: Here are the matching tasks in your list:\n" + TaskList.toString(foundTasks);
     }
 }
