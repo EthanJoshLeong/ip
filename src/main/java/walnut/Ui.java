@@ -64,6 +64,7 @@ public class Ui {
      * @param size Number of tasks in the list.
      */
     public String showInvalidTaskNumber(int size) {
+        assert size >= 0 : "Task-list size cannot be negative";
         return "Invalid task number. Please enter a number between 1 and "
                 + size + ".\n";
     }
