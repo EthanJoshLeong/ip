@@ -22,6 +22,7 @@ public class TaskList implements Iterable<Task> {
      * @param task Task to add.
      */
     public void add(Task task) {
+        assert task != null : "task should not be null";
         tasks.add(task);
     }
 
@@ -32,6 +33,8 @@ public class TaskList implements Iterable<Task> {
      * @return Task at the specified index.
      */
     public Task get(int index) {
+        assert index >= 0 && index < tasks.size()
+                : "Task index must refer to an existing task";
         return tasks.get(index);
     }
 
@@ -50,6 +53,8 @@ public class TaskList implements Iterable<Task> {
      * @param index Zero-based index of the task to remove.
      */
     public void remove(int index) {
+        assert index >= 0 && index < tasks.size()
+                : "Removal index must refer to an existing task";
         tasks.remove(index);
     }
 
@@ -69,6 +74,8 @@ public class TaskList implements Iterable<Task> {
      * @return Tasks whose descriptions contain the keyword.
      */
     public ArrayList<Task> find(String keyword) {
+        assert keyword != null && !keyword.isBlank()
+                : "Search keyword cannot be null or blank";
         ArrayList<Task> foundTasks = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getDescription().contains(keyword)) {
@@ -85,6 +92,7 @@ public class TaskList implements Iterable<Task> {
      * @return Formatted representation of the tasks.
      */
     public static String toString(ArrayList<Task> tasks) {
+        assert tasks != null : "Task collection cannot be null";
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
             sb.append((i + 1) + ". " + tasks.get(i).toString() + "\n");
