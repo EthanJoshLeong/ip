@@ -13,6 +13,13 @@ import java.util.List;
  * the task list.</p>
  */
 public class Walnut {
+    private static final String CMD_TODO = "todo";
+    private static final String CMD_DEADLINE = "deadline";
+    private static final String CMD_EVENT = "event";
+    private static final String CMD_FIND = "find";
+    private static final String SEP_BY = "/by";
+    private static final String SEP_FROM = "/from";
+    private static final String SEP_TO = "/to";
 
     private Ui ui;
     private TaskList tasks;
@@ -56,6 +63,28 @@ public class Walnut {
         return startupMessage;
     }
 
+    /**
+     * Parses and validates a 1-based task index from the request tokens.
+     *
+     * @param request tokenized user request
+     * @param tasks the current TaskList
+     * @return zero-based index
+     * @throws IllegalArgumentException with message "missing" or "invalid"
+     */
+    private int parseAndValidateIndex(String[] request, TaskList tasks) throws IllegalArgumentException {
+        if (request.length < 2) {
+            throw new IllegalArgumentException("missing");
+        }
+        try {
+            int idx = Integer.parseInt(request[1]) - 1;
+            if (idx < 0 || idx >= tasks.size()) {
+                throw new IllegalArgumentException("invalid");
+            }
+            return idx;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("invalid");
+        }
+    }
 
     /**
      * Processes a user command and returns Walnut's response.
@@ -69,6 +98,9 @@ public class Walnut {
     public String getResponse(String input) {
         // String input = ui.readCommand();
         String[] request = input.split(" ");
+        if (request.length == 0 || request[0].isEmpty()) {
+            return ui.showInvalidCommand();
+        }
 
         Command command = Parser.parseCommand(request[0]);
 
@@ -89,22 +121,22 @@ public class Walnut {
                 if (tasks.isEmpty()) {
                     return ui.showEmptyTaskListMessage();
                 }
+                int index;
                 try {
-                    int index = Integer.parseInt(request[1]) - 1;
-                    if (index < 0 || index >= tasks.size()) {
+                    index = parseAndValidateIndex(request, tasks);
+                } catch (IllegalArgumentException e) {
+                    if ("missing".equals(e.getMessage())) {
+                        return ui.showMissingTaskNumber();
+                    } else {
                         return ui.showInvalidTaskNumber(tasks.size());
                     }
-                } catch (NumberFormatException e) {
-                    return ui.showInvalidTaskNumber();
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    return ui.showMissingTaskNumber();
                 }
-                Task task = tasks.get(Integer.parseInt(request[1]) - 1);
+                Task task = tasks.get(index);
                 task.markAsDone();
                 try {
                     storage.save(tasks);
                 } catch (IOException e) {
-                    ui.showStorageError();
+                    return ui.showStorageError();
                 }
                 return ui.showTaskMarkedAsDone(task);
             }
@@ -113,17 +145,17 @@ public class Walnut {
                 if (tasks.isEmpty()) {
                     return ui.showEmptyTaskListMessage();
                 }
+                int index;
                 try {
-                    int index = Integer.parseInt(request[1]) - 1;
-                    if (index < 0 || index >= tasks.size()) {
+                    index = parseAndValidateIndex(request, tasks);
+                } catch (IllegalArgumentException e) {
+                    if ("missing".equals(e.getMessage())) {
+                        return ui.showMissingTaskNumber();
+                    } else {
                         return ui.showInvalidTaskNumber(tasks.size());
                     }
-                } catch (NumberFormatException e) {
-                    return ui.showInvalidTaskNumber();
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    return ui.showMissingTaskNumber();
                 }
-                Task task = tasks.get(Integer.parseInt(request[1]) - 1);
+                Task task = tasks.get(index);
                 task.markAsNotDone();
                 try {
                     storage.save(tasks);
@@ -134,11 +166,11 @@ public class Walnut {
             }
 
             case TODO: {
-                String description = input.substring(4).trim();
-                if (description.isEmpty()) {
+                String args = input.substring(CMD_TODO.length()).trim();
+                if (args.isEmpty()) {
                     return ui.showEmptyDescription("todo");
                 }
-                Task task = new ToDo(description);
+                Task task = new ToDo(args);
                 tasks.add(task);
                 try {
                     storage.save(tasks);
@@ -149,16 +181,17 @@ public class Walnut {
             }
 
             case DEADLINE: {
-                int byIndex = input.indexOf("/by");
+                String args = input.substring(CMD_DEADLINE.length()).trim();
+                int byIndex = args.indexOf(SEP_BY);
                 if (byIndex == -1) {
                     return ui.showInvalidDeadlineFormat();
                 }
-                String description = input.substring(9, byIndex).trim();
+                String description = args.substring(0, byIndex).trim();
                 if (description.isEmpty()) {
                     return ui.showEmptyDescription("deadline");
                 }
 
-                String by = input.substring(byIndex + 3).trim();
+                String by = args.substring(byIndex + SEP_BY.length()).trim();
                 LocalDateTime formattedByDateTime;
                 try {
                     formattedByDateTime = Parser.parseUserDateTime(by);
@@ -177,16 +210,17 @@ public class Walnut {
             }
 
             case EVENT: {
-                int fromIndex = input.indexOf("/from");
-                int toIndex = input.indexOf("/to");
+                String args = input.substring(CMD_EVENT.length()).trim();
+                int fromIndex = args.indexOf(SEP_FROM);
+                int toIndex = args.indexOf(SEP_TO);
                 if (fromIndex == -1 || toIndex == -1) {
                     return ui.showInvalidEventFormat();
                 }
-                String description = input.substring(5, fromIndex).trim();
+                String description = args.substring(0, fromIndex).trim();
                 if (description.isEmpty()) {
                     return ui.showEmptyDescription("event");
                 }
-                String from = input.substring(fromIndex + 5, toIndex).trim();
+                String from = args.substring(fromIndex + SEP_FROM.length(), toIndex).trim();
                 LocalDateTime formattedFromDateTime;
                 LocalDateTime formattedToDateTime;
                 try {
@@ -195,7 +229,7 @@ public class Walnut {
                     return ui.showInvalidDateTime();
                 }
 
-                String to = input.substring(toIndex + 3).trim();
+                String to = args.substring(toIndex + SEP_TO.length()).trim();
                 try {
                     formattedToDateTime = Parser.parseUserDateTime(to);
                 } catch (DateTimeParseException e) {
@@ -216,17 +250,16 @@ public class Walnut {
                 if (tasks.isEmpty()) {
                     return ui.showEmptyTaskListMessage();
                 }
+                int index;
                 try {
-                    int index = Integer.parseInt(request[1]) - 1;
-                    if (index < 0 || index >= tasks.size()) {
+                    index = parseAndValidateIndex(request, tasks);
+                } catch (IllegalArgumentException e) {
+                    if ("missing".equals(e.getMessage())) {
+                        return ui.showMissingTaskNumber();
+                    } else {
                         return ui.showInvalidTaskNumber(tasks.size());
                     }
-                } catch (NumberFormatException e) {
-                    return ui.showInvalidTaskNumber();
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    return ui.showMissingTaskNumber();
                 }
-                int index = Integer.parseInt(request[1]) - 1;
                 Task task = tasks.get(index);
                 tasks.remove(index);
                 try {
@@ -241,7 +274,7 @@ public class Walnut {
                 if (tasks.isEmpty()) {
                     return ui.showEmptyTaskListMessage();
                 }
-                String keyword = input.substring(5).trim();
+                String keyword = input.substring(CMD_FIND.length()).trim();
                 if (keyword.isEmpty()) {
                     return ui.showEmptyKeyword();
                 }
