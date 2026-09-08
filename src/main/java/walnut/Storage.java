@@ -49,6 +49,8 @@ public class Storage {
      * @throws IOException If the data directory or file cannot be accessed.
      */
     public void save(TaskList tasks) throws IOException {
+        assert tasks != null : "tasks should not be null";
+
         if (Files.notExists(getDir())) {
             Files.createDirectories(getDir());
         }
@@ -59,6 +61,11 @@ public class Storage {
         List<String> data = new ArrayList<>();
 
         for (Task task : tasks) {
+            assert task instanceof ToDo
+                    || task instanceof Deadline
+                    || task instanceof Event
+                    : "Unexpected task type";
+
             String line = "";
             if (task instanceof ToDo) {
                 line = "T | " + (task.isDone() ? 1 : 0) + " | "
