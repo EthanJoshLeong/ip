@@ -1,7 +1,6 @@
 package walnut;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a task that must be completed by a specified date and time.
@@ -18,13 +17,13 @@ public class Deadline extends Task {
     }
 
     public String getDeadline() {
-        return this.deadline.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm"));
+        return this.deadline.format(Parser.STORAGE_FMT);
     }
 
     @Override
     public String toString() {
         return "[D]" + super.toString()
-                + " (by: " + this.deadline.format(DateTimeFormatter.ofPattern("MMM d yyyy ha"))
+                + " (by: " + this.deadline.format(Parser.DISPLAY_FMT)
                 + ")";
     }
 }
