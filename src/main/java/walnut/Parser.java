@@ -16,6 +16,8 @@ public class Parser {
      */
     public static Command parseCommand(String command) {
 
+        assert command != null && !command.isBlank()
+                : "Command cannot be null or blank";
         switch (command.toLowerCase()) {
             case "todo":
                 return Command.TODO;
@@ -56,15 +58,28 @@ public class Parser {
      * @return Parsed task, or {@code null} if the task type is not recognized.
      */
     public static Task parseTask(String task) {
+        assert task != null && !task.isBlank()
+                : "Stored task record cannot be null or blank";
         String[] data = task.split(" \\| ");
+        assert data.length >= 3 : "Stored task record has too few fields";
+        assert data[0].equals("T")
+                || data[0].equals("D")
+                || data[0].equals("E")
+                : "Unknown stored task type";
+        assert data[1].equals("0") || data[1].equals("1")
+                : "Invalid completion status";
         Task newTask;
 
         if (data[0].equals("T")) {
             newTask = new ToDo(data[2]);
         } else if (data[0].equals("D")) {
+            assert data.length == 4 : "Deadline record must contain four fields";
             newTask = new Deadline(data[2], Parser.parseDateTime(data[3]));
         } else if (data[0].equals("E")) {
-            String[] dateTime = data[3].split("-");
+            assert data.length == 4 : "Event record must contain four fields";
+
+            String[] dateTime = data[3].split("-", 2);
+            assert dateTime.length == 2 : "Event record must contain start and end times";
             newTask = new Event(data[2], Parser.parseDateTime(dateTime[0]), Parser.parseDateTime(dateTime[1]));
         } else {
             return null;
@@ -84,6 +99,8 @@ public class Parser {
      * @return Parsed date and time.
      */
     public static LocalDateTime parseDateTime(String input) {
+        assert input != null && !input.isBlank()
+                : "Stored date-time cannot be null or blank";
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm");
 
@@ -97,6 +114,8 @@ public class Parser {
      * @return Parsed date and time.
      */
     public static LocalDateTime parseUserDateTime(String input) {
+        assert input != null && !input.isBlank()
+                : "User date-time cannot be null or blank";
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
