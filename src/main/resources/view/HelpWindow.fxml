@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="500.0" prefWidth="600.0">
+
+    <ScrollPane fitToWidth="true"
+                AnchorPane.topAnchor="0.0"
+                AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0">
+
+        <VBox spacing="12.0">
+
+            <Label text="Walnut Help"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+            <Label text="Commands"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <VBox spacing="0.0">
+                <Label text="todo &lt;description&gt;" />
+                <Label text="Adds a new todo to the list." />
+            </VBox>
+
+            <VBox spacing="0.0">
+                <Label text="deadline &lt;description&gt; /by &lt;YYYY-mm-dd HHmm&gt;" />
+                <Label text="Adds a new deadline to the list." />
+            </VBox>
+
+            <VBox spacing="0.0">
+                <Label text="event &lt;description&gt; /from &lt;YYYY-mm-dd HHmm&gt; /to &lt;YYYY-mm-dd HHmm&gt;" />
+                <Label text="Adds a new event to the list." />
+            </VBox>
+
+            <VBox spacing="0.0">
+                <Label text="mark &lt;index&gt;" />
+                <Label text="Marks the task at the specified index as done." />
+            </VBox>
+
+            <VBox spacing="0.0">
+                <Label text="unmark &lt;index&gt;" />
+                <Label text="Unmarks the task at the specified index." />
+            </VBox>
+
+            <VBox spacing="0.0">
+                <Label text="find &lt;keyword&gt;" />
+                <Label text="Lists all tasks containing the specified keyword." />
+            </VBox>
+
+            <VBox spacing="0.0">
+                <Label text="list" />
+                <Label text="Lists all tasks." />
+            </VBox>
+
+            <VBox spacing="0.0">
+                <Label text="remove &lt;index&gt;" />
+                <Label text="Removes the task at the specified index." />
+            </VBox>
+
+            <VBox spacing="0.0">
+                <Label text="/help" />
+                <Label text="Displays this help message." />
+            </VBox>
+
+            <VBox spacing="0.0">
+                <Label text="bye" />
+                <Label text="Exits the application." />
+            </VBox>
+
+        </VBox>
+
+    </ScrollPane>
+
+</AnchorPane>
