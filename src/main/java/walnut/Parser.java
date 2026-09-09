@@ -2,11 +2,17 @@ package walnut;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 /**
  * Converts user input and stored task data into Walnut objects.
  */
 public class Parser {
+
+    // Centralized date-time formatters to avoid duplication and mismatch
+    public static final DateTimeFormatter STORAGE_FMT = DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm");
+    public static final DateTimeFormatter USER_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+    public static final DateTimeFormatter DISPLAY_FMT = DateTimeFormatter.ofPattern("MMM d yyyy h a");
 
     /**
      * Returns the command represented by the specified command string.
@@ -60,36 +66,48 @@ public class Parser {
     public static Task parseTask(String task) {
         assert task != null && !task.isBlank()
                 : "Stored task record cannot be null or blank";
-        String[] data = task.split(" \\| ");
-        assert data.length >= 3 : "Stored task record has too few fields";
-        assert data[0].equals("T")
-                || data[0].equals("D")
-                || data[0].equals("E")
-                : "Unknown stored task type";
-        assert data[1].equals("0") || data[1].equals("1")
-                : "Invalid completion status";
-        Task newTask;
+        try {
+            String[] data = task.split(" \\| ");
+            assert data.length >= 3 : "Stored task record has too few fields";
+            assert data[0].equals("T")
+                    || data[0].equals("D")
+                    || data[0].equals("E")
+                    : "Unknown stored task type";
+            assert data[1].equals("0") || data[1].equals("1")
+                    : "Invalid completion status";
+            Task newTask;
+            switch (data[0]) {
+                case "T":
+                    newTask = new ToDo(data[2]);
+                    break;
+                case "D":
+                    if (data.length < 4) {
+                        return null;
+                    }
+                    newTask = new Deadline(data[2], Parser.parseDateTime(data[3]));
+                    break;
+                case "E":
+                    if (data.length < 4) {
+                        return null;
+                    }
+                    String[] dateTime = data[3].split("-");
+                    if (dateTime.length < 2) {
+                        return null;
+                    }
+                    newTask = new Event(data[2], Parser.parseDateTime(dateTime[0]), Parser.parseDateTime(dateTime[1]));
+                    break;
+                default:
+                    return null;
+            }
 
-        if (data[0].equals("T")) {
-            newTask = new ToDo(data[2]);
-        } else if (data[0].equals("D")) {
-            assert data.length == 4 : "Deadline record must contain four fields";
-            newTask = new Deadline(data[2], Parser.parseDateTime(data[3]));
-        } else if (data[0].equals("E")) {
-            assert data.length == 4 : "Event record must contain four fields";
+            if ("1".equals(data[1])) {
+                newTask.markAsDone();
+            }
 
-            String[] dateTime = data[3].split("-", 2);
-            assert dateTime.length == 2 : "Event record must contain start and end times";
-            newTask = new Event(data[2], Parser.parseDateTime(dateTime[0]), Parser.parseDateTime(dateTime[1]));
-        } else {
+            return newTask;
+        } catch (DateTimeParseException | ArrayIndexOutOfBoundsException e) {
             return null;
         }
-
-        if (data[1].equals("1")) {
-            newTask.markAsDone();
-        }
-
-        return newTask;
     }
 
     /**
@@ -104,7 +122,7 @@ public class Parser {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm");
 
-        return LocalDateTime.parse(input, formatter);
+        return LocalDateTime.parse(input, STORAGE_FMT);
     }
 
     /**
@@ -119,6 +137,6 @@ public class Parser {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
-        return LocalDateTime.parse(input, formatter);
+        return LocalDateTime.parse(input, USER_FMT);
     }
 }

@@ -61,22 +61,21 @@ public class Storage {
         List<String> data = new ArrayList<>();
 
         for (Task task : tasks) {
+            String line;
             assert task instanceof ToDo
                     || task instanceof Deadline
                     || task instanceof Event
                     : "Unexpected task type";
-
-            String line = "";
             if (task instanceof ToDo) {
-                line = "T | " + (task.isDone() ? 1 : 0) + " | "
-                        + task.getDescription();
+                line = "T | " + (task.isDone() ? 1 : 0) + " | " + task.getDescription();
             } else if (task instanceof Deadline) {
-                line = "D | " + (task.isDone() ? 1 : 0) + " | "
-                        + task.getDescription() + " | " + ((Deadline) task).getDeadline();
+                line = "D | " + (task.isDone() ? 1 : 0) + " | " + task.getDescription()
+                       + " | " + ((Deadline) task).getDeadline();
             } else if (task instanceof Event) {
-                line = "E | " + (task.isDone() ? 1 : 0) + " | "
-                        + task.getDescription() + " | " + ((Event) task).getEventStartTime()
-                        + "-" + ((Event) task).getEventEndTime();
+                line = "E | " + (task.isDone() ? 1 : 0) + " | " + task.getDescription()
+                       + " | " + ((Event) task).getEventStartTime() + "-" + ((Event) task).getEventEndTime();
+            } else {
+                throw new IllegalStateException("Unsupported Task subtype: " + task.getClass().getName());
             }
             data.add(line);
         }

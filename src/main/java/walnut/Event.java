@@ -1,7 +1,6 @@
 package walnut;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a task that takes place during a specified time interval.
@@ -25,19 +24,19 @@ public class Event extends Task {
     }
 
     public String getEventStartTime() {
-        return this.eventStartTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm"));
+        return this.eventStartTime.format(Parser.STORAGE_FMT);
     }
 
     public String getEventEndTime() {
-        return this.eventEndTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm"));
+        return this.eventEndTime.format(Parser.STORAGE_FMT);
     }
 
     @Override
     public String toString() {
         return "[E]" + super.toString()
-                + " (from: " + this.eventStartTime.format(DateTimeFormatter.ofPattern("MMM d yyyy ha"))
+                + " (from: " + this.eventStartTime.format(Parser.DISPLAY_FMT)
                 + " to: "
-                + this.eventEndTime.format(DateTimeFormatter.ofPattern("MMM d yyyy ha"))
+                + this.eventEndTime.format(Parser.DISPLAY_FMT)
                 + ")";
     }
 }
