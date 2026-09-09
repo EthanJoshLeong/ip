@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
  * the dialog boxes shown in the main window.</p>
  */
 public class MainWindow extends AnchorPane {
+    private static final String HELP_COMMAND = "/help";
     private Ui ui = new Ui();
     @FXML
     private ScrollPane scrollPane;
@@ -74,6 +75,11 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
+        if (input.equals("/help")) {
+            HelpWindow.show();
+            userInput.clear();
+            return;
+        }
         String response = walnut.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
