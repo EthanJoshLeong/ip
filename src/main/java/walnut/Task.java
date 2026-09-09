@@ -11,6 +11,8 @@ public class Task {
      * Creates an incomplete task with the specified description.
      */
     public Task(String description) {
+        assert description != null && !description.isBlank()
+                : "Task description should not be empty";
         this.description = description;
         this.isDone = false;
     }

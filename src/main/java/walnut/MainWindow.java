@@ -48,6 +48,7 @@ public class MainWindow extends AnchorPane {
      * @param w the Walnut instance to be used by the controller
      */
     public void setWalnut(Walnut w) {
+        assert w != null : "Walnut instance cannot be null";
         walnut = w;
 
         String welcome = ui.showBanner() + ui.showGreeting();

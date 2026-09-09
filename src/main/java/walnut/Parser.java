@@ -22,6 +22,8 @@ public class Parser {
      */
     public static Command parseCommand(String command) {
 
+        assert command != null && !command.isBlank()
+                : "Command cannot be null or blank";
         switch (command.toLowerCase()) {
             case "todo":
                 return Command.TODO;
@@ -62,11 +64,17 @@ public class Parser {
      * @return Parsed task, or {@code null} if the task type is not recognized.
      */
     public static Task parseTask(String task) {
+        assert task != null && !task.isBlank()
+                : "Stored task record cannot be null or blank";
         try {
             String[] data = task.split(" \\| ");
-            if (data.length < 3) {
-                return null;
-            }
+            assert data.length >= 3 : "Stored task record has too few fields";
+            assert data[0].equals("T")
+                    || data[0].equals("D")
+                    || data[0].equals("E")
+                    : "Unknown stored task type";
+            assert data[1].equals("0") || data[1].equals("1")
+                    : "Invalid completion status";
             Task newTask;
             switch (data[0]) {
                 case "T":
@@ -109,6 +117,11 @@ public class Parser {
      * @return Parsed date and time.
      */
     public static LocalDateTime parseDateTime(String input) {
+        assert input != null && !input.isBlank()
+                : "Stored date-time cannot be null or blank";
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm");
+
         return LocalDateTime.parse(input, STORAGE_FMT);
     }
 
@@ -119,6 +132,11 @@ public class Parser {
      * @return Parsed date and time.
      */
     public static LocalDateTime parseUserDateTime(String input) {
+        assert input != null && !input.isBlank()
+                : "User date-time cannot be null or blank";
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+
         return LocalDateTime.parse(input, USER_FMT);
     }
 }

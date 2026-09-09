@@ -96,7 +96,8 @@ public class Walnut {
      * @return Walnut's response to the command
      */
     public String getResponse(String input) {
-        // String input = ui.readCommand();
+        assert input != null && !input.isBlank()
+                : "User input cannot be null or blank";
         String[] request = input.split(" ");
         if (request.length == 0 || request[0].isEmpty()) {
             return ui.showInvalidCommand();
@@ -107,6 +108,8 @@ public class Walnut {
         if (command == null) {
             return ui.showInvalidCommand();
         }
+        assert command == Parser.parseCommand(request[0])
+                : "Parsed command should remain consistent";
 
         switch (command) {
             case BYE: {
@@ -133,6 +136,7 @@ public class Walnut {
                 }
                 Task task = tasks.get(index);
                 task.markAsDone();
+                assert task.isDone() : "Task should be marked as done";
                 try {
                     storage.save(tasks);
                 } catch (IOException e) {
@@ -157,6 +161,7 @@ public class Walnut {
                 }
                 Task task = tasks.get(index);
                 task.markAsNotDone();
+                assert !task.isDone() : "Task should be marked as not done";
                 try {
                     storage.save(tasks);
                 } catch (IOException e) {
