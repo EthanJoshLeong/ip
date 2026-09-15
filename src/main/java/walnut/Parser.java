@@ -58,54 +58,86 @@ public class Parser {
     }
 
     /**
-     * Returns the task represented by the specified stored task record.
+     * Returns the task represented by a stored task record.
      *
-     * @param task Stored task record to parse.
-     * @return Parsed task, or {@code null} if the task type is not recognized.
+     * <p>Malformed records are ignored instead of crashing the application.</p>
+     *
+     * @param task stored task record
+     * @return parsed task, or null if the record is invalid
      */
     public static Task parseTask(String task) {
-        assert task != null && !task.isBlank()
-                : "Stored task record cannot be null or blank";
+        if (task == null || task.isBlank()) {
+            return null;
+        }
+
         try {
-            String[] data = task.split(" \\| ");
-            assert data.length >= 3 : "Stored task record has too few fields";
-            assert data[0].equals("T")
-                    || data[0].equals("D")
-                    || data[0].equals("E")
-                    : "Unknown stored task type";
-            assert data[1].equals("0") || data[1].equals("1")
-                    : "Invalid completion status";
+            String[] data = task.split(" \\| ", -1);
+
+            if (data.length < 3) {
+                return null;
+            }
+
+            String taskType = data[0].trim();
+            String completionStatus = data[1].trim();
+            String description = data[2].trim();
+
+            if (!completionStatus.equals("0") && !completionStatus.equals("1")) {
+                return null;
+            }
+
+            if (description.isEmpty()) {
+                return null;
+            }
+
             Task newTask;
-            switch (data[0]) {
+
+            switch (taskType) {
                 case "T":
-                    newTask = new ToDo(data[2]);
+                    if (data.length != 3) {
+                        return null;
+                    }
+                    newTask = new ToDo(description);
                     break;
+
                 case "D":
-                    if (data.length < 4) {
+                    if (data.length != 4) {
                         return null;
                     }
-                    newTask = new Deadline(data[2], Parser.parseDateTime(data[3]));
+                    newTask = new Deadline(description, parseDateTime(data[3].trim()));
                     break;
+
                 case "E":
-                    if (data.length < 4) {
+                    if (data.length != 4) {
                         return null;
                     }
-                    String[] dateTime = data[3].split("-");
-                    if (dateTime.length < 2) {
+
+                    String[] dateTime = data[3].split("-", -1);
+
+                    if (dateTime.length != 2) {
                         return null;
                     }
-                    newTask = new Event(data[2], Parser.parseDateTime(dateTime[0]), Parser.parseDateTime(dateTime[1]));
+
+                    LocalDateTime start = parseDateTime(dateTime[0].trim());
+                    LocalDateTime end = parseDateTime(dateTime[1].trim());
+
+                    if (!end.isAfter(start)) {
+                        return null;
+                    }
+
+                    newTask = new Event(description, start, end);
                     break;
+
                 default:
                     return null;
             }
 
-            if ("1".equals(data[1])) {
+            if (completionStatus.equals("1")) {
                 newTask.markAsDone();
             }
 
             return newTask;
-        } catch (DateTimeParseException | ArrayIndexOutOfBoundsException e) {
+        } catch (DateTimeParseException | NumberFormatException
+                 | ArrayIndexOutOfBoundsException e) {
             return null;
         }
     }

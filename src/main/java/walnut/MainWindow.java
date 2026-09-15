@@ -75,6 +75,10 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
+        if (input == null || input.isBlank()) {
+            userInput.clear();
+            return;
+        }
         if (input.equals("/help")) {
             HelpWindow.show();
             userInput.clear();
