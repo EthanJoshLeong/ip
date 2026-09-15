@@ -158,10 +158,23 @@ public class Ui {
     }
 
     /**
-     * Displays a storage error message.
+     * Displays a storage loading error.
+     *
+     * @return loading error message
      */
-    public String showStorageError() {
-        return "Error loading tasks.";
+    public String showStorageLoadError() {
+        return "I could not load your saved tasks. "
+                + "The application started with an empty list.";
+    }
+
+    /**
+     * Displays a storage saving error.
+     *
+     * @return saving error message
+     */
+    public String showStorageSaveError() {
+        return "I could not save that change. "
+                + "Your previous task data has been preserved.";
     }
 
     /**
@@ -178,5 +191,32 @@ public class Ui {
      */
     public String showFoundTasks(ArrayList<Task> foundTasks) {
         return "Walnut: Here are the matching tasks in your list:\n" + TaskList.toString(foundTasks);
+    }
+
+    /**
+     * Displays a message when the user enters no command.
+     *
+     * @return message explaining that a command is required
+     */
+    public String showEmptyCommand() {
+        return "Please enter a command. Type /help to see the available commands.";
+    }
+
+    /**
+     * Displays a message when an event's end time is not after its start time.
+     *
+     * @return event time-range error message
+     */
+    public String showInvalidEventTimeRange() {
+        return "The event end time must be later than the start time.";
+    }
+
+    /**
+     * Displays a message when a duplicate task is added.
+     *
+     * @return duplicate-task error message
+     */
+    public String showDuplicateTask() {
+        return "This task already exists in your task list.";
     }
 }
