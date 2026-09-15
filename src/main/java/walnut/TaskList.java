@@ -19,22 +19,27 @@ public class TaskList implements Iterable<Task> {
     /**
      * Adds a task to the end of the list.
      *
-     * @param task Task to add.
+     * @param task task to add
      */
     public void add(Task task) {
-        assert task != null : "task should not be null";
+        if (task == null) {
+            throw new IllegalArgumentException("Task cannot be null");
+        }
+
         tasks.add(task);
     }
 
     /**
      * Returns the task at the specified zero-based index.
      *
-     * @param index Zero-based index of the task.
-     * @return Task at the specified index.
+     * @param index zero-based index
+     * @return task at the specified index
      */
     public Task get(int index) {
-        assert index >= 0 && index < tasks.size()
-                : "Task index must refer to an existing task";
+        if (index < 0 || index >= tasks.size()) {
+            throw new IndexOutOfBoundsException("Invalid task index");
+        }
+
         return tasks.get(index);
     }
 
@@ -50,11 +55,13 @@ public class TaskList implements Iterable<Task> {
     /**
      * Removes the task at the specified zero-based index.
      *
-     * @param index Zero-based index of the task to remove.
+     * @param index zero-based index
      */
     public void remove(int index) {
-        assert index >= 0 && index < tasks.size()
-                : "Removal index must refer to an existing task";
+        if (index < 0 || index >= tasks.size()) {
+            throw new IndexOutOfBoundsException("Invalid task index");
+        }
+
         tasks.remove(index);
     }
 
@@ -99,6 +106,50 @@ public class TaskList implements Iterable<Task> {
         }
         sb.append("You have " + tasks.size() + " tasks in your list.");
         return sb.toString();
+    }
+
+    /**
+     * Checks whether an equivalent task already exists.
+     *
+     * @param candidate task to check
+     * @return true if an equivalent task is already present
+     */
+    public boolean containsEquivalent(Task candidate) {
+        if (candidate == null) {
+            return false;
+        }
+
+        for (Task existing : tasks) {
+            if (existing.getClass() != candidate.getClass()) {
+                continue;
+            }
+
+            if (!existing.getDescription().equals(candidate.getDescription())) {
+                continue;
+            }
+
+            if (candidate instanceof Deadline candidateDeadline
+                    && existing instanceof Deadline existingDeadline) {
+                if (!existingDeadline.getDeadline()
+                        .equals(candidateDeadline.getDeadline())) {
+                    continue;
+                }
+            }
+
+            if (candidate instanceof Event candidateEvent
+                    && existing instanceof Event existingEvent) {
+                if (!existingEvent.getEventStartTime()
+                        .equals(candidateEvent.getEventStartTime())
+                        || !existingEvent.getEventEndTime()
+                        .equals(candidateEvent.getEventEndTime())) {
+                    continue;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
