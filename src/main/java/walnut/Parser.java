@@ -3,16 +3,23 @@ package walnut;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 /**
  * Converts user input and stored task data into Walnut objects.
  */
 public class Parser {
 
-    // Centralized date-time formatters to avoid duplication and mismatch
-    public static final DateTimeFormatter STORAGE_FMT = DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm");
-    public static final DateTimeFormatter USER_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-    public static final DateTimeFormatter DISPLAY_FMT = DateTimeFormatter.ofPattern("MMM d yyyy h a");
+    public static final DateTimeFormatter STORAGE_FMT =
+            DateTimeFormatter.ofPattern("uuuu/MM/dd HHmm")
+                    .withResolverStyle(ResolverStyle.STRICT);
+
+    public static final DateTimeFormatter USER_FMT =
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm")
+                    .withResolverStyle(ResolverStyle.STRICT);
+
+    public static final DateTimeFormatter DISPLAY_FMT =
+            DateTimeFormatter.ofPattern("MMM d uuuu h a");
 
     /**
      * Returns the command represented by the specified command string.
@@ -113,12 +120,14 @@ public class Parser {
 
                     String[] dateTime = data[3].split("-", -1);
 
-                    if (dateTime.length != 2) {
+                    if (dateTime.length != 2
+                            || dateTime[0].isBlank()
+                            || dateTime[1].isBlank()) {
                         return null;
                     }
 
-                    LocalDateTime start = parseDateTime(dateTime[0].trim());
-                    LocalDateTime end = parseDateTime(dateTime[1].trim());
+                    LocalDateTime start = Parser.parseDateTime(dateTime[0].trim());
+                    LocalDateTime end = Parser.parseDateTime(dateTime[1].trim());
 
                     if (!end.isAfter(start)) {
                         return null;
@@ -149,12 +158,15 @@ public class Parser {
      * @return Parsed date and time.
      */
     public static LocalDateTime parseDateTime(String input) {
-        assert input != null && !input.isBlank()
-                : "Stored date-time cannot be null or blank";
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("yyyy/MM/dd HHmm");
+        if (input == null || input.isBlank()) {
+            throw new DateTimeParseException(
+                    "Date-time cannot be blank",
+                    input == null ? "" : input,
+                    0
+            );
+        }
 
-        return LocalDateTime.parse(input, STORAGE_FMT);
+        return LocalDateTime.parse(input.trim(), STORAGE_FMT);
     }
 
     /**
@@ -164,11 +176,14 @@ public class Parser {
      * @return Parsed date and time.
      */
     public static LocalDateTime parseUserDateTime(String input) {
-        assert input != null && !input.isBlank()
-                : "User date-time cannot be null or blank";
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+        if (input == null || input.isBlank()) {
+            throw new DateTimeParseException(
+                    "Date-time cannot be blank",
+                    input == null ? "" : input,
+                    0
+            );
+        }
 
-        return LocalDateTime.parse(input, USER_FMT);
+        return LocalDateTime.parse(input.trim(), USER_FMT);
     }
 }
