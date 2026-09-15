@@ -15,10 +15,13 @@ public class Event extends Task {
     public Event(String description, LocalDateTime eventStartTime,
                  LocalDateTime eventEndTime) {
         super(description);
-        assert eventStartTime != null : "Event start time cannot be null";
-        assert eventEndTime != null : "Event end time cannot be null";
-        assert !eventEndTime.isBefore(eventStartTime)
-                : "Event end time cannot be before start time";
+        if (eventStartTime == null
+                || eventEndTime == null
+                || !eventEndTime.isAfter(eventStartTime)) {
+            throw new IllegalArgumentException(
+                    "Event end time must be after start time"
+            );
+        }
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
     }
