@@ -9,11 +9,15 @@ public class Task {
 
     /**
      * Creates an incomplete task with the specified description.
+     *
+     * @param description task description
      */
     public Task(String description) {
-        assert description != null && !description.isBlank()
-                : "Task description should not be empty";
-        this.description = description;
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Task description cannot be empty");
+        }
+
+        this.description = description.trim();
         this.isDone = false;
     }
 
