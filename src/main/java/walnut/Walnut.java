@@ -43,7 +43,7 @@ public class Walnut {
         try {
             data = storage.load();
         } catch (IOException e) {
-            startupMessage = ui.showStorageError();
+            startupMessage = ui.showStorageLoadError();
         }
 
         for (String line : data) {
@@ -87,6 +87,16 @@ public class Walnut {
     }
 
     /**
+     * Checks whether a command contains exactly one task number.
+     *
+     * @param request tokenized command
+     * @return true if the command has exactly two tokens
+     */
+    private boolean hasExactlyOneTaskNumber(String[] request) {
+        return request.length == 2;
+    }
+
+    /**
      * Processes a user command and returns Walnut's response.
      *
      * <p>The command is parsed and executed based on its type. Commands may
@@ -96,9 +106,13 @@ public class Walnut {
      * @return Walnut's response to the command
      */
     public String getResponse(String input) {
-        assert input != null && !input.isBlank()
-                : "User input cannot be null or blank";
-        String[] request = input.split(" ");
+        if (input == null || input.isBlank()) {
+            return ui.showEmptyCommand();
+        }
+
+        input = input.trim();
+        String[] request = input.split("\\s+");
+
         if (request.length == 0 || request[0].isEmpty()) {
             return ui.showInvalidCommand();
         }
@@ -121,6 +135,11 @@ public class Walnut {
             }
 
             case MARK: {
+                if (!hasExactlyOneTaskNumber(request)) {
+                    return request.length < 2
+                            ? ui.showMissingTaskNumber()
+                            : ui.showInvalidCommand();
+                }
                 if (tasks.isEmpty()) {
                     return ui.showEmptyTaskListMessage();
                 }
@@ -135,17 +154,30 @@ public class Walnut {
                     }
                 }
                 Task task = tasks.get(index);
+                boolean previousStatus = task.isDone();
+
                 task.markAsDone();
-                assert task.isDone() : "Task should be marked as done";
+
                 try {
                     storage.save(tasks);
                 } catch (IOException e) {
-                    return ui.showStorageError();
+                    if (!previousStatus) {
+                        task.markAsNotDone();
+                    } else {
+                        task.markAsDone();
+                    }
+
+                    return ui.showStorageSaveError();
                 }
                 return ui.showTaskMarkedAsDone(task);
             }
 
             case UNMARK: {
+                if (!hasExactlyOneTaskNumber(request)) {
+                    return request.length < 2
+                            ? ui.showMissingTaskNumber()
+                            : ui.showInvalidCommand();
+                }
                 if (tasks.isEmpty()) {
                     return ui.showEmptyTaskListMessage();
                 }
@@ -160,12 +192,20 @@ public class Walnut {
                     }
                 }
                 Task task = tasks.get(index);
+                boolean previousStatus = task.isDone();
+
                 task.markAsNotDone();
-                assert !task.isDone() : "Task should be marked as not done";
+
                 try {
                     storage.save(tasks);
                 } catch (IOException e) {
-                    return ui.showStorageError();
+                    if (previousStatus) {
+                        task.markAsDone();
+                    } else {
+                        task.markAsNotDone();
+                    }
+
+                    return ui.showStorageSaveError();
                 }
                 return ui.showTaskMarkedAsNotDone(task);
             }
@@ -176,11 +216,14 @@ public class Walnut {
                     return ui.showEmptyDescription("todo");
                 }
                 Task task = new ToDo(args);
+                if (tasks.containsEquivalent(task)) {
+                    return ui.showDuplicateTask();
+                }
                 tasks.add(task);
                 try {
                     storage.save(tasks);
                 } catch (IOException e) {
-                    return ui.showStorageError();
+                    return ui.showStorageSaveError();
                 }
                 return ui.showTaskAdded(task, tasks.size());
             }
@@ -188,15 +231,24 @@ public class Walnut {
             case DEADLINE: {
                 String args = input.substring(CMD_DEADLINE.length()).trim();
                 int byIndex = args.indexOf(SEP_BY);
-                if (byIndex == -1) {
+                int secondByIndex = args.indexOf(SEP_BY, byIndex + SEP_BY.length());
+
+                if (byIndex == -1 || secondByIndex != -1) {
                     return ui.showInvalidDeadlineFormat();
                 }
                 String description = args.substring(0, byIndex).trim();
+
+                if (description.contains("/from") || description.contains("/to")) {
+                    return ui.showInvalidDeadlineFormat();
+                }
                 if (description.isEmpty()) {
                     return ui.showEmptyDescription("deadline");
                 }
 
                 String by = args.substring(byIndex + SEP_BY.length()).trim();
+                if (by.isEmpty()) {
+                    return ui.showInvalidDateTime();
+                }
                 LocalDateTime formattedByDateTime;
                 try {
                     formattedByDateTime = Parser.parseUserDateTime(by);
@@ -205,11 +257,14 @@ public class Walnut {
                 }
 
                 Task task = new Deadline(description, formattedByDateTime);
+                if (tasks.containsEquivalent(task)) {
+                    return ui.showDuplicateTask();
+                }
                 tasks.add(task);
                 try {
                     storage.save(tasks);
                 } catch (IOException e) {
-                    return ui.showStorageError();
+                    return ui.showStorageSaveError();
                 }
                 return ui.showTaskAdded(task, tasks.size());
             }
@@ -218,7 +273,15 @@ public class Walnut {
                 String args = input.substring(CMD_EVENT.length()).trim();
                 int fromIndex = args.indexOf(SEP_FROM);
                 int toIndex = args.indexOf(SEP_TO);
-                if (fromIndex == -1 || toIndex == -1) {
+
+                int secondFromIndex = args.indexOf(SEP_FROM, fromIndex + SEP_FROM.length());
+                int secondToIndex = args.indexOf(SEP_TO, toIndex + SEP_TO.length());
+
+                if (fromIndex == -1
+                        || toIndex == -1
+                        || secondFromIndex != -1
+                        || secondToIndex != -1
+                        || fromIndex > toIndex) {
                     return ui.showInvalidEventFormat();
                 }
                 String description = args.substring(0, fromIndex).trim();
@@ -226,6 +289,9 @@ public class Walnut {
                     return ui.showEmptyDescription("event");
                 }
                 String from = args.substring(fromIndex + SEP_FROM.length(), toIndex).trim();
+                if (from.isEmpty()) {
+                    return ui.showInvalidDateTime();
+                }
                 LocalDateTime formattedFromDateTime;
                 LocalDateTime formattedToDateTime;
                 try {
@@ -235,18 +301,26 @@ public class Walnut {
                 }
 
                 String to = args.substring(toIndex + SEP_TO.length()).trim();
+                if (to.isEmpty()) {
+                    return ui.showInvalidDateTime();
+                }
                 try {
                     formattedToDateTime = Parser.parseUserDateTime(to);
                 } catch (DateTimeParseException e) {
                     return ui.showInvalidDateTime();
                 }
-
+                if (!formattedToDateTime.isAfter(formattedFromDateTime)) {
+                    return ui.showInvalidEventTimeRange();
+                }
                 Task task = new Event(description, formattedFromDateTime, formattedToDateTime);
+                if (tasks.containsEquivalent(task)) {
+                    return ui.showDuplicateTask();
+                }
                 tasks.add(task);
                 try {
                     storage.save(tasks);
                 } catch (IOException e) {
-                    return ui.showStorageError();
+                    return ui.showStorageSaveError();
                 }
                 return ui.showTaskAdded(task, tasks.size());
             }
@@ -254,6 +328,11 @@ public class Walnut {
             case REMOVE: {
                 if (tasks.isEmpty()) {
                     return ui.showEmptyTaskListMessage();
+                }
+                if (!hasExactlyOneTaskNumber(request)) {
+                    return request.length < 2
+                            ? ui.showMissingTaskNumber()
+                            : ui.showInvalidCommand();
                 }
                 int index;
                 try {
@@ -267,10 +346,12 @@ public class Walnut {
                 }
                 Task task = tasks.get(index);
                 tasks.remove(index);
+
                 try {
                     storage.save(tasks);
                 } catch (IOException e) {
-                    return ui.showStorageError();
+                    tasks.add(task);
+                    return ui.showStorageSaveError();
                 }
                 return ui.showTaskRemoved(task, tasks.size());
             }
