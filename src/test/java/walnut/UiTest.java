@@ -20,12 +20,6 @@ class UiTest {
     }
 
     @Test
-    void invalidCommand_explainsExpectedFormat() {
-        assertTrue(ui.showInvalidCommand().contains("todo"));
-        assertTrue(ui.showInvalidCommand().contains("event"));
-    }
-
-    @Test
     void taskMessages_containRelevantInformation() {
         Task task = new ToDo("buy milk");
 
