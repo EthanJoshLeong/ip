@@ -1,5 +1,7 @@
 package walnut;
 
+import java.util.Objects;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * Controller for the main GUI.
@@ -49,13 +52,14 @@ public class MainWindow extends AnchorPane {
      * @param w the Walnut instance to be used by the controller
      */
     public void setWalnut(Walnut w) {
-        assert w != null : "Walnut instance cannot be null";
-        walnut = w;
-
-        String welcome = ui.showBanner() + ui.showGreeting();
+        walnut = Objects.requireNonNull(w, "Walnut instance cannot be null");
 
         dialogContainer.getChildren().add(
-                DialogBox.getWalnutDialog(welcome, walnutImage)
+                DialogBox.getWalnutDialog(ui.showBanner(), walnutImage)
+        );
+
+        dialogContainer.getChildren().add(
+                DialogBox.getWalnutDialog(ui.showGreeting(), walnutImage)
         );
 
         String startupMessage = walnut.getStartupMessage();
@@ -75,21 +79,34 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
+
         if (input == null || input.isBlank()) {
             userInput.clear();
             return;
         }
-        if (input.equals("/help")) {
+
+        input = input.trim();
+
+        if (input.equalsIgnoreCase("/help")) {
             HelpWindow.show();
             userInput.clear();
             return;
         }
+
+        boolean shouldExit = input.equalsIgnoreCase("bye");
         String response = walnut.getResponse(input);
+
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
                 DialogBox.getWalnutDialog(response, walnutImage)
         );
+
         userInput.clear();
+
+        if (shouldExit) {
+            Stage currentStage = (Stage) userInput.getScene().getWindow();
+            currentStage.close();
+        }
     }
 }
 
