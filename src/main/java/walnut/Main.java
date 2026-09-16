@@ -1,6 +1,9 @@
 package walnut;
 
 import java.io.IOException;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,10 +28,17 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) {
+        // Configure global logger for the application to ensure consistent logging behavior
+        Logger rootLogger = Logger.getLogger("");
+        rootLogger.setLevel(Level.INFO);
+        for (Handler h : rootLogger.getHandlers()) {
+            h.setLevel(Level.INFO);
+        }
+
         try {
+            stage.setTitle("Walnut");
             stage.setMinHeight(220);
             stage.setMinWidth(417);
-            stage.setMaxWidth(417);
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
@@ -36,7 +46,8 @@ public class Main extends Application {
             fxmlLoader.<MainWindow>getController().setWalnut(walnut);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger(Main.class.getName())
+                    .log(Level.SEVERE, "Failed to load MainWindow FXML", e);
         }
     }
 }

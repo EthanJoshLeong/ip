@@ -52,8 +52,9 @@ class ParserValidationTest {
 
     @Test
     void parseDateTime_rejectsUserFormat() {
+        String input = "2026-09-01 1700";
         assertThrows(DateTimeParseException.class,
-                () -> Parser.parseDateTime("2026-09-01 1700"));
+                () -> Parser.parseDateTime(input));
     }
 
     @Test
@@ -65,7 +66,8 @@ class ParserValidationTest {
 
     @Test
     void parseUserDateTime_rejectsImpossibleDate() {
+        String input = "2026-02-30 1700";
         assertThrows(DateTimeParseException.class,
-                () -> Parser.parseUserDateTime("2026-02-30 1700"));
+                () -> Parser.parseUserDateTime(input));
     }
 }

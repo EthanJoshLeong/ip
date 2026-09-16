@@ -93,22 +93,6 @@ public class TaskList implements Iterable<Task> {
     }
 
     /**
-     * Returns a formatted string containing the specified tasks.
-     *
-     * @param tasks Tasks to format.
-     * @return Formatted representation of the tasks.
-     */
-    public static String toString(ArrayList<Task> tasks) {
-        assert tasks != null : "Task collection cannot be null";
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < tasks.size(); i++) {
-            sb.append((i + 1) + ". " + tasks.get(i).toString() + "\n");
-        }
-        sb.append("You have " + tasks.size() + " tasks in your list.");
-        return sb.toString();
-    }
-
-    /**
      * Checks whether an equivalent task already exists.
      *
      * @param candidate task to check
@@ -150,6 +134,22 @@ public class TaskList implements Iterable<Task> {
         }
 
         return false;
+    }
+
+    /**
+     * Returns a formatted string containing the specified tasks.
+     *
+     * @param tasks Tasks to format.
+     * @return Formatted representation of the tasks.
+     */
+    public static String toString(ArrayList<Task> tasks) {
+        assert tasks != null : "Task collection cannot be null";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tasks.size(); i++) {
+            sb.append((i + 1) + ". " + tasks.get(i).toString() + "\n");
+        }
+        sb.append("You have " + tasks.size() + " tasks in your list.");
+        return sb.toString();
     }
 
     @Override
