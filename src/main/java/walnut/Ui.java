@@ -29,8 +29,8 @@ public class Ui {
      * @return the greeting message shown to users
      */
     public String showGreeting() {
-        return "Hello! I'm Walnut.\n"
-                + "What can I do for you?";
+        return "Woof! I'm Walnut.\n"
+                + "Ready to fetch some tasks?";
     }
 
     /**
@@ -39,7 +39,7 @@ public class Ui {
      * @return the farewell message shown when the application exits
      */
     public String showFarewell() {
-        return "Bye. Hope to see you again soon!";
+        return "Session complete. Time for a well-earned rest.";
     }
 
     /**
@@ -48,7 +48,7 @@ public class Ui {
      * @return a message describing the expected task command format
      */
     public String showInvalidCommand() {
-        return "Invalid task format. Type /help to see the available commands.";
+        return "That command went off-leash. Type /help to see the available commands.";
     }
 
     /**
@@ -58,7 +58,7 @@ public class Ui {
      * @return a formatted string containing all tasks in the list
      */
     public String showTaskList(TaskList tasks) {
-        return "Here are the tasks in your list:\n" + tasks.toString();
+        return "Here are the tasks I sniffed out:\n" + tasks.toString();
     }
 
     /**
@@ -67,7 +67,7 @@ public class Ui {
      * @return a message indicating that the task list is empty
      */
     public String showEmptyTaskListMessage() {
-        return "Your task list is empty. Please add a task first.\n";
+        return "The list is waiting for its first task. Please add a task first.\n";
     }
 
     /**
@@ -78,17 +78,8 @@ public class Ui {
      */
     public String showInvalidTaskNumber(int size) {
         assert size >= 0 : "Task-list size cannot be negative";
-        return "Invalid task number. Please enter a number between 1 and "
+        return "That task number ran out of the yard. Please enter a number between 1 and "
                 + size + ".\n";
-    }
-
-    /**
-     * Displays an invalid task-number message.
-     *
-     * @return an error message asking the user to enter a valid task number
-     */
-    public String showInvalidTaskNumber() {
-        return "Invalid task number. Please enter a valid number.\n";
     }
 
     /**
@@ -97,7 +88,7 @@ public class Ui {
      * @return a prompt asking the user to specify the task number
      */
     public String showMissingTaskNumber() {
-        return "Please specify the task number to mark.\n";
+        return "Please tell me which task needs attention.";
     }
 
     /**
@@ -107,7 +98,7 @@ public class Ui {
      * @return a confirmation message indicating the task was marked as done
      */
     public String showTaskMarkedAsDone(Task task) {
-        return "Task marked as done!";
+        return "Task marked as done. Give yourself a round of appaws!";
     }
 
     /**
@@ -117,7 +108,7 @@ public class Ui {
      * @return a confirmation message indicating the task was marked as not done
      */
     public String showTaskMarkedAsNotDone(Task task) {
-        return "Task marked as not done!";
+        return "Task marked as incomplete. It still needs a little attention.";
     }
 
     /**
@@ -127,7 +118,7 @@ public class Ui {
      * @return an error message indicating the description cannot be empty
      */
     public String showEmptyDescription(String taskType) {
-        return "The description of a " + taskType
+        return "Please give the task something to bark about. The description of a " + taskType
                 + " cannot be empty.";
     }
 
@@ -149,7 +140,8 @@ public class Ui {
      * @return a message describing the correct event command format
      */
     public String showInvalidEventFormat() {
-        return "Invalid event format. Please use the format: "
+        return "The event command needs a little obedience training."
+                + "Please use the format: "
                 + "event <description> /from <start time> /to <end time>\n";
     }
 
@@ -159,7 +151,8 @@ public class Ui {
      * @return a message describing the correct deadline command format
      */
     public String showInvalidDeadlineFormat() {
-        return "Invalid deadline format. Please use the format: "
+        return "That deadline needs better command training.\n"
+                + "Please use the format: "
                 + "deadline <description> /by <deadline>\n";
     }
 
@@ -169,7 +162,7 @@ public class Ui {
      * @return a message describing the expected date/time format
      */
     public String showInvalidDateTime() {
-        return "Invalid DateTime format. "
+        return "That date did not pass the sniff test. "
                 + "Please use the format <YYYY-mm-dd HHmm>";
     }
 
@@ -191,8 +184,8 @@ public class Ui {
      * @return the loading error message shown when saved tasks cannot be loaded
      */
     public String showStorageLoadError() {
-        return "I could not load your saved tasks. "
-                + "The application started with an empty list.";
+        return "I could not fetch your saved tasks.\n"
+                + "The task file may have gone into hiding.";
     }
 
     /**
@@ -201,7 +194,7 @@ public class Ui {
      * @return the saving error message shown when changes cannot be saved
      */
     public String showStorageSaveError() {
-        return "I could not save that change. "
+        return "Your task data slipped its leash. "
                 + "Your previous task data has been preserved.";
     }
 
@@ -211,7 +204,7 @@ public class Ui {
      * @return a prompt asking the user to specify a search keyword
      */
     public String showEmptyKeyword() {
-        return "Please specify a keyword to search for.";
+        return "Please provide a keyword for me to sniff out.";
     }
 
     /**
@@ -221,7 +214,8 @@ public class Ui {
      * @return a formatted string containing the matching tasks
      */
     public String showFoundTasks(ArrayList<Task> foundTasks) {
-        return "Here are the matching tasks in your list:\n" + TaskList.toString(foundTasks);
+        return "Here is what I dug up:\n"
+                + TaskList.toString(foundTasks);
     }
 
     /**
@@ -230,7 +224,8 @@ public class Ui {
      * @return a message explaining that a command is required
      */
     public String showEmptyCommand() {
-        return "Please enter a command. Type /help to see the available commands.";
+        return "I did not hear a command. Please give me something to fetch."
+                + " Type /help to see the available commands.";
     }
 
     /**
@@ -239,7 +234,7 @@ public class Ui {
      * @return a message indicating the event end time must be later than the start
      */
     public String showInvalidEventTimeRange() {
-        return "The event end time must be later than the start time.";
+        return "That event’s timeline is chasing its tail. The event end time must be later than the start time.";
     }
 
     /**
@@ -248,6 +243,6 @@ public class Ui {
      * @return a message indicating the task already exists in the list
      */
     public String showDuplicateTask() {
-        return "This task already exists in your task list.";
+        return "This task has already joined the pack and already exists in your task list.";
     }
 }
