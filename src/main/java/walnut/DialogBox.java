@@ -146,13 +146,18 @@ public class DialogBox extends HBox {
         if (message.startsWith("invalid")
                 || message.startsWith("error")
                 || message.startsWith("please")
-                || message.startsWith("this task already")
-                || message.startsWith("the description")
-                || message.startsWith("i could not")
+                || message.startsWith("that command")
                 || message.startsWith("that task")
-                || message.startsWith("that event")
+                || message.startsWith("which task")
+                || message.startsWith("the description")
+                || message.startsWith("the event command")
                 || message.startsWith("that deadline")
-                || message.startsWith("the event's")
+                || message.startsWith("that date")
+                || message.startsWith("i could not")
+                || message.startsWith("your task data")
+                || message.startsWith("i did not hear")
+                || message.startsWith("this task")
+                || message.startsWith("that event")
                 || message.contains("must be")) {
             dialog.getStyleClass().add("error-label");
         }
